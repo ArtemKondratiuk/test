@@ -5,3 +5,68 @@ controllers:
 kernel:
     resource: ../src/Kernel.php
     type: annotation
+
+api_login_check:
+    path: /api/login_check
+
+gesdinet_jwt_refresh_token:
+    path:       /api/token/refresh
+    controller: gesdinet.jwtrefreshtoken::refresh
+
+authentication_token:
+    path: /authentication_token
+    methods: ['POST']
+
+registration:
+    path: /api/user/registration
+    methods: ['POST']
+    defaults:
+        _api_resource_class: App\Entity\User
+        _api_item_operation_name: registration
+        _api_receive: false
+        _controller: App\Controller\UserController::registration
+
+show_post:
+    path: /api/posts
+    methods: ['GET']
+    defaults:
+        _api_resource_class: App\Entity\Post
+        _api_item_operation_name: showPost
+        _api_receive: false
+        _controller: App\Controller\PostController::showPost
+
+show_post_by_id:
+    path: /api/post/{id}
+    methods: ['GET']
+    defaults:
+        _api_resource_class: App\Entity\Post
+        _api_item_operation_name: showPostById
+        _api_receive: false
+        _controller: App\Controller\PostController::showPostById
+
+new_post:
+    path: /api/post/new
+    methods: ['POST']
+    defaults:
+        _api_resource_class: App\Entity\Post
+        _api_item_operation_name: newPost
+        _api_receive: false
+        _controller: App\Controller\PostController::newPost
+
+edit_post:
+    path: /api/edit/{id}
+    methods: ['POST']
+    defaults:
+        _api_resource_class: App\Entity\Post
+        _api_item_operation_name: editPost
+        _api_receive: false
+        _controller: App\Controller\PostController::editPost
+
+remove_post:
+    path: /api/remove/{id}
+    methods: ['DELETE']
+    defaults:
+        _api_resource_class: App\Entity\Post
+        _api_item_operation_name: removePost
+        _api_receive: false
+        _controller: App\Controller\PostController::removePost
