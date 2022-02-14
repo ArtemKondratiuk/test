@@ -1,6 +1,6 @@
 Getting started
 
-git https://github.com/ArtemKondratiuk/test.git
+git clone https://github.com/ArtemKondratiuk/test.git
 
 cd test
 
