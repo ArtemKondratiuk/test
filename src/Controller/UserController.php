@@ -19,10 +19,14 @@ class UserController extends AbstractController
     {
 
         $newUserDto = new NewUserDto();
-        $newUserDto->setUsername(json_decode($request->getContent(), true)['username'])
-                ->setEmail(json_decode($request->getContent(), true)['email'])
-                ->setPassword(json_decode($request->getContent(), true)['password'])
-        ;
+//        $newUserDto->setUsername(json_decode($request->getContent(), true)['username'])
+//                ->setEmail(json_decode($request->getContent(), true)['email'])
+//                ->setPassword(json_decode($request->getContent(), true)['password'])
+//        ;
+        $newUserDto->setUsername($request->get('username')
+            ->setEmail($request->get('email')
+            ->setPassword($request->get('password')
+            )));
 
         $this->validator->validate($newUserDto);
         $this->userService->newUser($newUserDto);

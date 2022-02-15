@@ -6,8 +6,11 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\PostController;
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ApiResource(
     collectionOperations: [
@@ -17,18 +20,45 @@ use Symfony\Component\Validator\Constraints as Assert;
             'path' => '/posts',
             'controller' => PostController::class,
         ],
+        'new_post' => [
+            'route_name' => 'new_post',
+            'method' => 'POST',
+            'path' => '/post/new',
+            'controller' => PostController::class,
+            'openapi_context' => [
+                'requestBody' => [
+                    'description' => 'New Post',
+                    'required' => true,
+                    'content' => [
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'title' => [
+                                        'type' => 'string',
+                                        'description' => 'add title'
+                                    ],
+                                     'text' => [
+                                         'type' => 'string',
+                                         'description' => 'add text'
+                                     ],
+                                     'category' => [
+                                         'type' => 'string',
+                                         'description' => 'add category'
+                                     ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
     ],
     itemOperations: [
         'show_post_by_id' => [
             'route_name' => 'show_post_by_id',
             'method' => 'GET',
             'path' => '/post/{id}',
-            'controller' => PostController::class,
-        ],
-        'new_post' => [
-            'route_name' => 'new_post',
-            'method' => 'POST',
-            'path' => '/post/new',
             'controller' => PostController::class,
         ],
         'edit_post' => [
@@ -68,12 +98,20 @@ class Post
     #[Assert\NotNull]
     #[Assert\NotBlank]
     #[Groups('get')]
-    private $content;
+    private $text;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups('get')]
     private $author;
+
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'posts')]
+    private Collection $categories;
+
+    #[Pure] public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -92,14 +130,14 @@ class Post
         return $this;
     }
 
-    public function getContent(): ?string
+    public function getText(): ?string
     {
-        return $this->content;
+        return $this->text;
     }
 
-    public function setContent(string $content): self
+    public function setText(string $text): self
     {
-        $this->content = $content;
+        $this->text = $text;
 
         return $this;
     }
@@ -114,5 +152,24 @@ class Post
         $this->author = $author;
 
         return $this;
+    }
+
+    public function addCategory(Category ...$categories): void
+    {
+        foreach ($categories as $category) {
+            if (!$this->categories->contains($category)) {
+                $this->categories->add($category);
+            }
+        }
+    }
+
+    public function removeCategory(Category $category): void
+    {
+        $this->categories->removeElement($category);
+    }
+
+    public function getCategories(): Collection
+    {
+        return $this->categories;
     }
 }

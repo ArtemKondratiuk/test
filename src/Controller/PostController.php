@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
+use App\Dto\NewCategoryDto;
 use App\Dto\NewPostDto;
 use App\Entity\Post;
 use App\Service\PostService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -31,27 +31,37 @@ class PostController extends AbstractController
         return $this->json($post);
     }
 
-    #[IsGranted('ROLE_USER')]
     public function newPost(Request $request)
     {
         $newPostDto = new NewPostDto();
-        $newPostDto->setTitle(json_decode($request->getContent(), true)['title'])
-            ->setContent(json_decode($request->getContent(), true)['content'])
-        ;
+        $newCategoryDto = new NewCategoryDto();
+//        $newPostDto->setTitle(json_decode($request->getContent(), true)['title'])
+//            ->setContent(json_decode($request->getContent(), true)['content'])
+//        ;
+        $newPostDto->setTitle($request->get('title')
+                ->setText($request->get('text')
+                )
+        );
 
+        $newCategoryDto->setName($request->get('name'));
+
+        $this->validator->validate($newCategoryDto);
         $this->validator->validate($newPostDto);
-        $this->postService->newPost($newPostDto);
-
+//        $post = $this->postService->newPost($newPostDto);
+//        return $post;
         return $this->json($newPostDto);
     }
 
-    #[IsGranted('ROLE_USER')]
     public function editPost(Request $request, Post $post)
     {
         $newPostDto = new NewPostDto();
-        $newPostDto->setTitle(json_decode($request->getContent(), true)['title'])
-            ->setContent(json_decode($request->getContent(), true)['content'])
-        ;
+//        $newPostDto->setTitle(json_decode($request->getContent(), true)['title'])
+//            ->setContent(json_decode($request->getContent(), true)['content'])
+//        ;
+
+        $newPostDto->setTitle($request->get('title')
+            ->setText($request->get('text'))
+        );
 
         $this->validator->validate($newPostDto);
         $this->postService->editPost($newPostDto, $post);
@@ -59,7 +69,6 @@ class PostController extends AbstractController
         return $this->json($newPostDto);
     }
 
-    #[IsGranted('ROLE_USER')]
     public function removePost(Post $post)
     {
         $this->postService->removePost($post);

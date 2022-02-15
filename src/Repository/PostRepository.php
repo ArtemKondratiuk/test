@@ -2,9 +2,12 @@
 
 namespace App\Repository;
 
+use App\Dto\NewPostDto;
 use App\Entity\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @method Post|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,11 +17,27 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PostRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, public EntityManagerInterface $em, public Security $security)
     {
         parent::__construct($registry, Post::class);
     }
 
+//    public function newPost(NewPostDto $newPostDto)
+//    {
+//        $post = new Post();
+//        $post->setTitle($newPostDto->getTitle())
+//            ->setContent($newPostDto->getContent())
+//            ->setAuthor($this->security->getUser())
+//        ;
+//
+//        $this->em->persist($post);
+//        $this->em->flush();
+//    }
+//
+//    private function save()
+//    {
+//
+//    }
     // /**
     //  * @return Post[] Returns an array of Post objects
     //  */

@@ -70,3 +70,21 @@ remove_post:
         _api_item_operation_name: removePost
         _api_receive: false
         _controller: App\Controller\PostController::removePost
+
+admin_show_posts:
+    path: /api/admin/posts
+    methods: ['GET']
+    defaults:
+        _api_resource_class: App\Entity\Post
+        _api_item_operation_name: showPosts
+        _api_receive: false
+        _controller: App\Controller\AdminController::showPosts
+
+admin_show_users:
+    path: /api/admin/users
+    methods: ['GET']
+    defaults:
+        _api_resource_class: App\Entity\User
+        _api_item_operation_name: showUsers
+        _api_receive: false
+        _controller: App\Controller\AdminController::showUsers

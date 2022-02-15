@@ -12,15 +12,49 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    collectionOperations: [],
-    itemOperations: [
-        'get' => [],
+    collectionOperations: [
         'registration' => [
             'route_name' => 'registration',
             'method' => 'POST',
             'path' => '/user/registration',
             'controller' => UserController::class,
+            'openapi_context' => [
+                'requestBody' => [
+                    'description' => 'New User',
+                    'required' => true,
+                    'content' => [
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'username' => [
+                                        'type' => 'string',
+                                        'description' => 'add username'
+                                    ],
+                                    'email' => [
+                                        'type' => 'email',
+                                        'description' => 'add email'
+                                    ],
+                                    'password' => [
+                                        'type' => 'string',
+                                        'description' => 'add password'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
         ],
+    ],
+    itemOperations: [
+        'get' => [],
+//        'registration' => [
+//            'route_name' => 'registration',
+//            'method' => 'POST',
+//            'path' => '/user/registration',
+//            'controller' => UserController::class,
+//        ],
     ],
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -46,11 +80,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $email;
 
     #[ORM\Column(type: 'json')]
-    #[Groups('get')]
     private $roles = [];
 
     #[ORM\Column(type: 'string')]
-    #[Groups('get')]
     #[Assert\NotNull]
     #[Assert\NotBlank]
     #[Assert\Regex(

@@ -17,7 +17,7 @@ class NewPostDto
     #[Assert\Length(255)]
     #[Assert\NotNull]
     #[Assert\NotBlank]
-    private $content;
+    private $text;
 
 
     public function getTitle(): ?string
@@ -32,14 +32,14 @@ class NewPostDto
         return $this;
     }
 
-    public function getContent(): ?string
+    public function getText(): ?string
     {
-        return $this->content;
+        return $this->text;
     }
 
-    public function setContent(string $content): self
+    public function setText(string $text): self
     {
-        $this->content = $content;
+        $this->text = $text;
 
         return $this;
     }
