@@ -19,4 +19,3 @@ go to http://localhost/api
 Credantion for admin
 email: admin@gmail.com
 password: 12345678
-
