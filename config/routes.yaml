@@ -54,7 +54,7 @@ new_post:
         _controller: App\Controller\PostController::newPost
 
 edit_post:
-    path: /api/edit/{id}
+    path: /api/edit/post/{id}
     methods: ['POST']
     defaults:
         _api_resource_class: App\Entity\Post
@@ -63,7 +63,7 @@ edit_post:
         _controller: App\Controller\PostController::editPost
 
 remove_post:
-    path: /api/remove/{id}
+    path: /api/remove/post/{id}
     methods: ['DELETE']
     defaults:
         _api_resource_class: App\Entity\Post

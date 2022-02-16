@@ -71,7 +71,7 @@ use Doctrine\Common\Collections\Collection;
         'edit_post' => [
             'route_name' => 'edit_post',
             'method' => 'POST',
-            'path' => '/edit/{post}',
+            'path' => '/edit/post/{post}',
             'controller' => PostController::class,
             'openapi_context' => [
                 'requestBody' => [
@@ -104,7 +104,7 @@ use Doctrine\Common\Collections\Collection;
         'remove_post' => [
             'route_name' => 'remove_post',
             'method' => 'DELETE',
-            'path' => '/remove/{post}',
+            'path' => '/remove/post/{post}',
             'controller' => PostController::class,
         ],
     ],
