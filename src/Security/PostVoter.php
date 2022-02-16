@@ -10,9 +10,8 @@ use Symfony\Component\Security\Core\Security;
 
 class PostVoter extends Voter
 {
-    public const DELETE = 'delete';
+    public const REMOVE = 'remove';
     public const EDIT = 'edit';
-    public const NEW = 'new';
 
     public function __construct(
         public Security $security
@@ -20,7 +19,7 @@ class PostVoter extends Voter
 
     protected function supports(string $attribute, $subject): bool
     {
-        return $subject instanceof Post && \in_array($attribute, [self::NEW, self::EDIT, self::DELETE], true);
+        return $subject instanceof Post && \in_array($attribute, [self::EDIT, self::REMOVE], true);
     }
 
     protected function voteOnAttribute(string $attribute, $post, TokenInterface $token): bool
@@ -38,4 +37,3 @@ class PostVoter extends Voter
         return $user === $post->getAuthor();
     }
 }
-//$this->denyAccessUnlessGranted(PostVoter::EDIT, $post, 'Posts can be edit by author or admin');

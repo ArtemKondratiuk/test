@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\AdminController;
 use App\Controller\UserController;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,6 +14,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     collectionOperations: [
+        'admin_show_users' => [
+            'isGranted' => 'ROLE_ADMIN',
+            'route_name' => 'admin_show_users',
+            'method' => 'GET',
+            'path' => '/admin/users',
+            'controller' => AdminController::class,
+        ],
+
         'registration' => [
             'route_name' => 'registration',
             'method' => 'POST',
@@ -49,12 +58,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     itemOperations: [
         'get' => [],
-//        'registration' => [
-//            'route_name' => 'registration',
-//            'method' => 'POST',
-//            'path' => '/user/registration',
-//            'controller' => UserController::class,
-//        ],
     ],
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]

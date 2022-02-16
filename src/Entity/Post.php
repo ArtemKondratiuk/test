@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\AdminController;
 use App\Controller\PostController;
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,6 +20,12 @@ use Doctrine\Common\Collections\Collection;
             'method' => 'GET',
             'path' => '/posts',
             'controller' => PostController::class,
+        ],
+        'admin_show_posts' => [
+            'route_name' => 'admin_show_posts',
+            'method' => 'GET',
+            'path' => '/admin/posts',
+            'controller' => AdminController::class,
         ],
         'new_post' => [
             'route_name' => 'new_post',
@@ -66,6 +73,33 @@ use Doctrine\Common\Collections\Collection;
             'method' => 'POST',
             'path' => '/edit/{post}',
             'controller' => PostController::class,
+            'openapi_context' => [
+                'requestBody' => [
+                    'description' => 'Edit Post',
+                    'required' => true,
+                    'content' => [
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'title' => [
+                                        'type' => 'string',
+                                        'description' => 'edit title'
+                                    ],
+                                     'text' => [
+                                         'type' => 'string',
+                                         'description' => 'edit text'
+                                    ],
+                                     'category' => [
+                                         'type' => 'string',
+                                         'description' => 'edit category'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
         ],
         'remove_post' => [
             'route_name' => 'remove_post',
@@ -105,7 +139,7 @@ class Post
     #[Groups('get')]
     private $author;
 
-    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'posts')]
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'posts', cascade: ['persist'])]
     private Collection $categories;
 
     #[Pure] public function __construct()

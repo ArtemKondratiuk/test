@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Dto\NewCategoryDto;
 use App\Dto\NewPostDto;
+use App\Entity\Category;
 use App\Entity\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,22 +24,57 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
-//    public function newPost(NewPostDto $newPostDto)
-//    {
-//        $post = new Post();
-//        $post->setTitle($newPostDto->getTitle())
-//            ->setContent($newPostDto->getContent())
-//            ->setAuthor($this->security->getUser())
-//        ;
-//
-//        $this->em->persist($post);
-//        $this->em->flush();
-//    }
-//
-//    private function save()
-//    {
-//
-//    }
+    public function showPost(): array
+    {
+        return $this->findAll();
+    }
+
+    public function showPostById(int $id): ?Post
+    {
+        return $this->find($id);
+    }
+
+    public function newPost(NewPostDto $newPostDto, NewCategoryDto $newCategoryDto): Post
+    {
+        $post = new Post();
+        $category = new Category();
+
+        $category->setName($newCategoryDto->name);
+
+        $post->setTitle($newPostDto->title)
+            ->setText($newPostDto->text)
+            ->setAuthor($this->security->getUser())
+            ->addCategory($category)
+        ;
+
+        $this->em->persist($category);
+        $this->em->persist($post);
+        $this->em->flush();
+
+        return $post;
+    }
+
+    public function editPost(NewPostDto $newPostDto, NewCategoryDto $newCategoryDto, Post $post): Post
+    {
+        $category = new Category;
+        $category->setName($newCategoryDto->name);
+        $post->setTitle($newPostDto->title)
+            ->setText($newPostDto->text)
+            ->setAuthor($this->security->getUser())
+            ->addCategory($category)
+        ;
+
+        $this->em->flush();
+
+        return $post;
+    }
+
+    public function removePost(Post $post): void
+    {
+        $this->em->remove($post);
+        $this->em->flush();
+    }
+
     // /**
     //  * @return Post[] Returns an array of Post objects
     //  */
