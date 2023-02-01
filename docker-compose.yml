@@ -4,17 +4,20 @@ services:
   php-fpm:
     build:
       context: ./docker/php-fpm
-    container_name: 'php-fpm'
+    container_name: 'test-php-fpm'
     ports:
       - '9000:9000'
     depends_on:
       - mysql
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./:/var/www/app
+      - ./docker/php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
 
   nginx:
     image: nginx
-    container_name: 'nginx'
+    container_name: 'test-nginx'
     ports:
       - '80:80'
     depends_on:
@@ -27,7 +30,7 @@ services:
     image: mysql:8.0
     volumes:
       - mysql:/var/lib/mysql
-    container_name: 'database'
+    container_name: 'test-database'
     command: "--default-authentication-plugin=mysql_native_password"
     restart: always
     environment:

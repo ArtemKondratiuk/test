@@ -10,7 +10,6 @@ use App\Security\PostVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PostController extends AbstractController
@@ -36,9 +35,7 @@ class PostController extends AbstractController
 
     public function newPost(Request $request): Post
     {
-        if(!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            throw new AccessDeniedException('Only for authenticated user');
-        }
+        $this->isGranted('IS_AUTHENTICATED_FULLY');
 
         $newPostDto = new NewPostDto();
         $newCategoryDto = new NewCategoryDto();

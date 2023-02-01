@@ -19,14 +19,18 @@ use Symfony\Component\Security\Core\Security;
  */
 class PostRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, public EntityManagerInterface $em, public Security $security)
+    public function __construct(
+        ManagerRegistry $registry,
+        public EntityManagerInterface $em,
+        public Security $security
+    )
     {
         parent::__construct($registry, Post::class);
     }
 
     public function showPost(): array
     {
-        return $this->findAll();
+        return $this->findBy(['author' => $this->security->getUser()]);
     }
 
     public function showPostById(int $id): ?Post

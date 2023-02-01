@@ -12,6 +12,8 @@ class PostVoter extends Voter
 {
     public const REMOVE = 'remove';
     public const EDIT = 'edit';
+    public const VIEW = 'view';
+    public const NEW = 'new';
 
     public function __construct(
         public Security $security
@@ -19,7 +21,7 @@ class PostVoter extends Voter
 
     protected function supports(string $attribute, $subject): bool
     {
-        return $subject instanceof Post && \in_array($attribute, [self::EDIT, self::REMOVE], true);
+        return $subject instanceof Post && \in_array($attribute, [self::NEW, self::VIEW, self::EDIT, self::REMOVE], true);
     }
 
     protected function voteOnAttribute(string $attribute, $post, TokenInterface $token): bool

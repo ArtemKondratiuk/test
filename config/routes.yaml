@@ -18,7 +18,7 @@ authentication_token:
     methods: ['POST']
 
 registration:
-    path: /api/user/registration
+    path: /api/users
     methods: ['POST']
     defaults:
         _api_resource_class: App\Entity\User
@@ -36,7 +36,7 @@ show_post:
         _controller: App\Controller\PostController::showPost
 
 show_post_by_id:
-    path: /api/post/{id}
+    path: /api/posts/{id}
     methods: ['GET']
     defaults:
         _api_resource_class: App\Entity\Post
@@ -45,7 +45,7 @@ show_post_by_id:
         _controller: App\Controller\PostController::showPostById
 
 new_post:
-    path: /api/post/new
+    path: /api/posts
     methods: ['POST']
     defaults:
         _api_resource_class: App\Entity\Post
@@ -54,16 +54,25 @@ new_post:
         _controller: App\Controller\PostController::newPost
 
 edit_post:
-    path: /api/edit/post/{id}
-    methods: ['POST']
+    path: /api/posts/{id}
+    methods: ['PUT', 'PATCH']
     defaults:
         _api_resource_class: App\Entity\Post
         _api_item_operation_name: editPost
         _api_receive: false
         _controller: App\Controller\PostController::editPost
 
+#replace_post:
+#    path: /api/posts/{id}
+#    methods: ['PUT']
+#    defaults:
+#        _api_resource_class: App\Entity\Post
+#        _api_item_operation_name: editPost
+#        _api_receive: false
+#        _controller: App\Controller\PostController::editPost
+
 remove_post:
-    path: /api/remove/post/{id}
+    path: /api/posts/{id}
     methods: ['DELETE']
     defaults:
         _api_resource_class: App\Entity\Post

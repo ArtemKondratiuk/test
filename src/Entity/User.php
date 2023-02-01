@@ -14,18 +14,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     collectionOperations: [
-        'admin_show_users' => [
-            'isGranted' => 'ROLE_ADMIN',
-            'route_name' => 'admin_show_users',
-            'method' => 'GET',
-            'path' => '/admin/users',
-            'controller' => AdminController::class,
-        ],
+//        'admin_show_users' => [
+//            'isGranted' => 'ROLE_ADMIN',
+//            'route_name' => 'admin_show_users',
+//            'method' => 'GET',
+//            'path' => '/admin/users',
+//            'controller' => AdminController::class,
+//        ],
 
         'registration' => [
             'route_name' => 'registration',
             'method' => 'POST',
-            'path' => '/user/registration',
+            'path' => '/users',
             'controller' => UserController::class,
             'openapi_context' => [
                 'requestBody' => [
@@ -58,6 +58,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     itemOperations: [
         'get' => [],
+        'put' => [],
+        'patch' => [],
+        'delete' => [],
     ],
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -88,10 +91,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     #[Assert\NotNull]
     #[Assert\NotBlank]
-    #[Assert\Regex(
-        pattern: "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*()\-_=+{}|?>.<,:;~`']{8,}$/",
-        message: 'This password has unprocessable  symbols or less than 8 symbols'
-    )]
+//    #[Assert\Regex(
+/*        pattern: "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*()\-_=+{}|?>.<,:;~`']{8,}$/",*/
+//        message: 'This password has unprocessable  symbols or less than 8 symbols'
+//    )]
     private $password;
 
     public function getId(): ?int

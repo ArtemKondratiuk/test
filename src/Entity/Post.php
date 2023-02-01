@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\AdminController;
 use App\Controller\PostController;
@@ -21,16 +22,16 @@ use Doctrine\Common\Collections\Collection;
             'path' => '/posts',
             'controller' => PostController::class,
         ],
-        'admin_show_posts' => [
-            'route_name' => 'admin_show_posts',
-            'method' => 'GET',
-            'path' => '/admin/posts',
-            'controller' => AdminController::class,
-        ],
+//        'admin_show_posts' => [
+//            'route_name' => 'admin_show_posts',
+//            'method' => 'GET',
+//            'path' => '/admin/posts',
+//            'controller' => AdminController::class,
+//        ],
         'new_post' => [
             'route_name' => 'new_post',
             'method' => 'POST',
-            'path' => '/post/new',
+            'path' => '/posts',
             'controller' => PostController::class,
             'openapi_context' => [
                 'requestBody' => [
@@ -49,7 +50,7 @@ use Doctrine\Common\Collections\Collection;
                                          'type' => 'string',
                                          'description' => 'add text'
                                      ],
-                                     'category' => [
+                                     'categories' => [
                                          'type' => 'string',
                                          'description' => 'add category'
                                      ]
@@ -65,12 +66,12 @@ use Doctrine\Common\Collections\Collection;
         'show_post_by_id' => [
             'route_name' => 'show_post_by_id',
             'method' => 'GET',
-            'path' => '/post/{id}',
+            'path' => '/posts/{id}',
             'controller' => PostController::class,
         ],
         'edit_post' => [
             'route_name' => 'edit_post',
-            'method' => 'POST',
+            'method' => 'PATCH',
             'path' => '/edit/post/{post}',
             'controller' => PostController::class,
             'openapi_context' => [
@@ -78,7 +79,7 @@ use Doctrine\Common\Collections\Collection;
                     'description' => 'Edit Post',
                     'required' => true,
                     'content' => [
-                        'multipart/form-data' => [
+                        'application/x-www-form-urlencoded' => [
                             'schema' => [
                                 'type' => 'object',
                                 'properties' => [
@@ -101,16 +102,54 @@ use Doctrine\Common\Collections\Collection;
                 ]
             ]
         ],
+        'put' => [
+            'route_name' => 'edit_post',
+            'method' => 'PUT',
+            'path' => '/posts/{id}',
+            'controller' => PostController::class,
+            'openapi_context' => [
+                'requestBody' => [
+                    'description' => 'Edit Post',
+                    'required' => true,
+                    'content' => [
+                        'application/x-www-form-urlencoded' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'title' => [
+                                        'type' => 'string',
+                                        'description' => 'edit title'
+                                    ],
+                                    'text' => [
+                                        'type' => 'string',
+                                        'description' => 'edit text'
+                                    ],
+                                    'category' => [
+                                        'type' => 'string',
+                                        'description' => 'edit category'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
         'remove_post' => [
             'route_name' => 'remove_post',
             'method' => 'DELETE',
-            'path' => '/remove/post/{post}',
+            'path' => '/posts/{id}',
             'controller' => PostController::class,
         ],
     ],
+    denormalizationContext: [
+        'groups' => [
+            'write',
+        ]
+    ],
     normalizationContext: [
         'groups' => [
-            'get',
+            'read',
         ]
     ]
 )]
@@ -125,18 +164,18 @@ class Post
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotNull]
     #[Assert\NotBlank]
-    #[Groups('get')]
+    #[Groups('read')]
     private $title;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotNull]
     #[Assert\NotBlank]
-    #[Groups('get')]
+    #[Groups('read')]
     private $text;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups('get')]
+    #[Groups('read')]
     private $author;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'posts', cascade: ['persist'])]

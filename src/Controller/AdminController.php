@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Service\AdminService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class AdminController extends AbstractController
 {
@@ -15,9 +14,7 @@ class AdminController extends AbstractController
 
     public function showPosts(): JsonResponse
     {
-        if(!$this->isGranted(['ROLE_ADMIN'])) {
-            throw new AccessDeniedException('Only for admin');
-        }
+        $this->isGranted(['ROLE_ADMIN']);
 
         $posts = $this->adminService->showPosts();
 
@@ -26,9 +23,7 @@ class AdminController extends AbstractController
 
     public function showUsers(): JsonResponse
     {
-        if(!$this->isGranted(['ROLE_ADMIN'])) {
-            throw new AccessDeniedException('Only for admin');
-        }
+        $this->isGranted(['ROLE_ADMIN']);
 
         $users = $this->adminService->showUsers();
 
